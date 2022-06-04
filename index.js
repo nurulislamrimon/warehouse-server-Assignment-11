@@ -19,6 +19,9 @@ function run() {
         client.connect();
         // inventory collection
         const inventoryCollection = client.db('inventoryCollection').collection('inventory');
+        // banner collection
+        const bannerCollection = client.db('bannerCollection').collection('banner')
+
         // get all inventories
         app.get('/inventories', async (req, res) => {
             const query = {};
@@ -26,6 +29,15 @@ function run() {
             const result = await cursor.toArray();
             res.send(result)
             console.log('inventories responding');
+        })
+
+        // get all banners
+        app.get('/banners', async (req, res) => {
+            const query = {};
+            const cursor = bannerCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
+            console.log('banners responding');
         })
 
 
