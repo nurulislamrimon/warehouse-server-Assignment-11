@@ -38,9 +38,9 @@ function run() {
             const cursor = inventoryCollection.find(query).sort(sort).limit(limit);
             const result = await cursor.toArray();
             res.send(result)
-            console.log(req.query, 'inventory responding');
+            console.log('inventory responding');
         })
-        // read the inventory selected for update 
+        // read selected inventory
         app.get('/inventory/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) }
@@ -67,7 +67,15 @@ function run() {
             }
             const result = await inventoryCollection.updateOne(query, updateDoc, options);
             res.send(result)
-            console.log(newDatas);
+            console.log(id, "is updated");
+        })
+        // delete inventory
+        app.delete('/manage/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await inventoryCollection.deleteOne(query);
+            res.send(result);
+            console.log(id, 'is deleted');
         })
 
 
