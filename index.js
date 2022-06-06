@@ -48,6 +48,12 @@ function run() {
             res.send(result);
             console.log(id, 'id selected');
         })
+        app.post('/add', async (req, res) => {
+            const newProduct = req.body;
+            const result = await inventoryCollection.insertOne(newProduct)
+            res.send(result)
+            console.log(newProduct, 'is added');
+        })
         // update inventory
         app.put('/inventory/:id', async (req, res) => {
             const id = req.params.id;
