@@ -30,7 +30,7 @@ function run() {
             res.send(result);
             console.log('banners responding');
         })
-        // read all inventory
+        // read inventory by query sort & limit
         app.get('/inventory', async (req, res) => {
             const limit = parseInt(req.query.limit);
             const sort = { sold: parseInt(req.query.sort) };
@@ -40,6 +40,15 @@ function run() {
             res.send(result)
             console.log('inventory responding');
         })
+        // read myitems by query email
+        app.get('/myitems', async (req, res) => {
+            const email = req.query.email;
+            const query = { email: email };
+            const cursor = inventoryCollection.find(query)
+            const result = await cursor.toArray();
+            res.send(result)
+            console.log(email, ' items responding');
+        })
         // read selected inventory
         app.get('/inventory/:id', async (req, res) => {
             const id = req.params.id;
@@ -48,6 +57,7 @@ function run() {
             res.send(result);
             console.log(id, 'id selected');
         })
+        // add inventory
         app.post('/add', async (req, res) => {
             const newProduct = req.body;
             const result = await inventoryCollection.insertOne(newProduct)
