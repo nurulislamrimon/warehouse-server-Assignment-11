@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const app = express();
 const port = process.env.PORT || 5000;
 
+
 // middleware
 app.use(cors())
 app.use(express.json())
@@ -60,6 +61,22 @@ function run() {
             const result = await cursor.toArray();
             res.send(result)
             console.log('inventory responding');
+        })
+        // page count
+        app.get('/pagecount', async (req, res) => {
+            const count = await inventoryCollection.estimatedDocumentCount();
+            res.send({ count })
+        })
+        // read inventory by query sort & limit
+        app.get('/allinventory', async (req, res) => {
+            const limit = parseInt(req.query.limit);
+            const page = parseInt(req.query.page);
+            const skip = page * limit;
+            const query = {};
+            const cursor = inventoryCollection.find(query).skip(skip).limit(limit);
+            const result = await cursor.toArray();
+            res.send(result)
+            console.log(skip, limit, 'All responding');
         })
         // read myitems by query email
         app.get('/myitems', verifyJWT, async (req, res) => {
